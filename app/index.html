@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>A Template App</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script async src="https://static.freshdev.io/fdk/2.0/assets/fresh_client.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/style.css" />
+   <link  rel="stylesheet" type="text/css"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <body >
+    <div class="main">
+      <div>
+        <div id="1">
+          <div class="container">
+            <button class="btn btn-primary mt-2">Choose Person</button>
+            <div class="border p-3 mt-2">
+              <!-- <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" id="genreButtons">
+                <label class="form-check-label" for="flexCheckDefault">
+                  $
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="2" id="genreButtons">
+                <label class="form-check-label" for="flexCheckDefault">
+                 $$
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="3" id="genreButtons">
+                <label class="form-check-label" for="flexCheckDefault">
+                  $$$
+                </label>
+              </div> -->
+              <div class="container" id="filterCheckbox">
+              </div>
+          
+          </div>
+            <div class="row m-2">
+              <button
+                class="btn btn-danger col-4 m-1"
+                onclick="changeStepper(1,'next')"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="2" style="display: none;">
+          <div class="container">
+            <button class="btn btn-primary mt-2">Suggested</button>
+            <div class="border p-3 mt-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="true" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Offers Delivery
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="true" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                  Open Now
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="true" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Offers Takeout
+                  </label>
+                </div>
+                
+            
+            </div>
+            <div class="row m-2">
+              <button class="btn btn-danger col-4 m-1"
+                       onclick="changeStepper(2,'prev')">Prev</button>
+      
+              <button class="btn btn-danger col-4 m-1"  onclick="changeStepper(2,'next')">Next</button>
+            </div>
+          </div>
+        </div>
+         <div id="3" style="display: none;">
+          <div class="container">
+            <button class="btn btn-primary mt-2">Categories</button>
+            <div class="border ml-3 mt-2">
+              <!-- <div class="border p-3 mt-2">
+                <h3>Suggested</h3>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="Afgan" id="Categories">
+                  <label class="form-check-label" for="flexCheckDefault">
+                  Afgan
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="American" id="Categories">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    American
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="Indian" id="Categories">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Indian
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="Chinese" id="Categories">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Chinese
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="Canadian" id="Categories">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Canadian
+                  </label>
+                </div>
+            
+            </div> -->
+            <div class="mb-3 container">
+              <label for="exampleInputEmail1" class="form-label">Select category</label>
+              <input type="text" id="multiselect" class="form-control" onkeyup="searchCategory()" id="exampleInputEmail1" >
+            </div>
+          <div class="container" id="categoriesCheckbox">
+          </div>
+          <div class="row container" id="selectedItem">
+          </div>
+            </div>
+            <div class="row m-3">
+              <button class="btn btn-danger col-4 m-1"
+                       onclick="changeStepper(3,'prev')">Prev</button>
+      
+              <button class="btn btn-danger col-5 m-1" onclick="changeStepper(3,'next'); submit();">Submit</button>
+            </div>
+          </div>
+        </div>
+        <div id="4" style="display: none;">
+          <div class="container">
+            <button class="btn btn-primary mt-2">Stepper 4</button>
+            <div id="restaurantName"></div>
+            <div class="row m-2">
+              <button class="btn btn-danger col-4 m-1"
+                       onclick="changeStepper(4,'prev')">Prev</button>
+      
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      </div>
+    
+      <p id="apptext"></p>
+  </body>
+
+  <script defer src="scripts/app.js">
+
+  </script>
+  <script async type="module" src="https://unpkg.com/@freshworks/crayons@3/dist/crayons/crayons.esm.js"></script>
+  <script async nomodule src="https://unpkg.com/@freshworks/crayons@3/dist/crayons/crayons.js"></script>
+  
+<script>
+  const changeStepper = function (stepper, direction) {
+    console.log("stepper",stepper,direction)
+  if (direction == "next") {
+    for (i = 1; i <= 4; i++) {
+      if (i == stepper + 1) {
+        document.getElementById(i).style.display = "block";
+      } else {
+        document.getElementById(i).style.display = "none";
+      }
+    }
+  } else {
+    for (i = 1; i <= 4; i++) {
+      if (i == stepper - 1) {
+        document.getElementById(i).style.display = "block";
+      } else {
+        document.getElementById(i).style.display = "none";
+      }
+    }
+  }
+};
+
+</script>
+</html>

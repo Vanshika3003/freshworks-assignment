@@ -1,0 +1,51 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:after,
+*::before {
+  box-sizing: inherit;
+}
+.btn-group .button:first-child{
+  border-radius: 16px 0 0 16px !important;
+}
+
+.btn-group button {
+  background-color: white; /* Green background */
+  border: 1px solid black; /* Green border */
+  color: black; /* White text */
+  padding: 5px 14px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: left; /* Float the buttons side by side */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+
+}
+
+.btn-group button:not(:last-child) {
+  border-right: 8px; 
+}
+
+.btn-group button:hover {
+  background-color: grey;
+}
+.text{
+  
+  overflow: hidden;
+  white-space: nowrap;
+  align-items: center;
+}
+.icon{
+ 
+    content: "\2705";
+
+}
+.checked {
+  color: orange;
+}

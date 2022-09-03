@@ -1,0 +1,21 @@
+{
+  "platform-version": "2.2",
+  "product": {
+    "freshdesk": {
+      "location": {
+        "ticket_sidebar": {
+          "url": "index.html",
+          "icon": "styles/images/icon.svg"
+        }
+      }
+    }
+  },
+  "whitelisted-domains": [
+    "https://api.yelp.com",
+    "https://*.freshdesk.com"
+  ],
+  "engines": {
+    "node": "14.20.0",
+    "fdk": "8.5.0"
+  }
+}
