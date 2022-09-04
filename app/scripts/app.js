@@ -1,5 +1,4 @@
 var client;
-var buttonChecked;
 let allCheckBox = document.querySelectorAll('#flexCheckDefault')
 let checkboxhtmlPrices = ''
 let checkboxhtmlCategories = ''
@@ -9,7 +8,7 @@ let currentStatusCategories
 var data=[]
 var CategoryData;
 var inputText=''
-var m='vanshika'
+var m='vanshika:)'
 var businessCategories
 var titleResponse
 var autocompleteResponse
@@ -86,12 +85,10 @@ function checkboxFeaturesEvent(id) {
   featureChecked = featureParams.toString();
 }
 
-console.log("glovalll",m)
 allCheckBox.forEach((checkbox) => {
   checkbox.addEventListener('change', (event) => {
     if (event.target.checked) {
       suggestedChecked = event.target.value;
-      console.log(suggestedChecked)
     }
   })
 })
@@ -108,9 +105,7 @@ allCheckBox.forEach((checkbox) => {
 
 function searchCategory()
 {
-  console.log("hiii")
   inputText=document.getElementById('multiselect').value ;
-  console.log("inputText",inputText)
   if(inputText.length==0)
   {
    allCategories({},[]);
@@ -135,10 +130,8 @@ let categoryArray=JSON.parse(autocompleteResponse.response).categories;
 let map1 = categoryArray.map((item, index) => ({ ...item, id: index + 100001, checked: false }));
   data=map1;
   allCategories({},data);
- console.log("dat12",data);
 
 }
-console.log("window.text",data)
 
 //Getting All Params on submitting filters
 function submit() {
@@ -152,11 +145,9 @@ function submit() {
     location: "Canada"
 
   }
-  console.log("pah",payload)
   const new_params = new URLSearchParams([
     ...Object.entries(payload),
   ]).toString();
-  console.log(new_params);
   filteredRestaurants(new_params);
 
 }
@@ -174,8 +165,15 @@ async function filteredRestaurants(new_params) {
   const parsedResponse = JSON.parse(allRestaurants.response);
   for (let i = 0; i < parsedResponse.businesses.length; i++) {
    businessCategories= (parsedResponse.businesses[i].categories)
-   console.log("businessCategories",businessCategories)
-   titleResponse=JSON.stringify(businessCategories);
+   //titleResponse=JSON.stringify(businessCategories);
+   var  categoriesUI=''
+   businessCategories.forEach((element) =>{
+    categoriesUI+=`<div class="text">
+    <span class="border p-1 text-center text-muted bg-light"><small>${element.title}</small> </span>&nbsp;
+    </div>`
+   })
+ 
+
     searchedRestaurant += ` <div class="border column">
    <div class=" p-3" >
      <img src="${parsedResponse.businesses[i].image_url}" style="max-width: 155px;height: 170px; "  class="rounded mx-auto d-block" alt="">
@@ -198,10 +196,7 @@ async function filteredRestaurants(new_params) {
    <span>${parsedResponse.businesses[i].location.display_address}</span>
   </div>
   <div class="text-center">
-  <div class="text">
-  ${JSON.stringify(businessCategories[0].title)}
-  ${businessCategories.forEach((element) => `<span class="border p-1 text-center text-muted bg-light"><small>${element.title}</small> </span>&nbsp;`)}
-  </div>
+  ${categoriesUI}
   <div class="text"><span class="icon">&#9989;</span><small>&nbsp;Delivery</small>
    <span class="icon">&#9989;</span><small>&nbsp;Delivery</small>
  </div>
@@ -214,7 +209,6 @@ async function filteredRestaurants(new_params) {
 }
 async function allCategories(event,argsCategoryValue=[]) {
   CategoryData=argsCategoryValue
-  console.log(">>>>>>>>>>>>>>> Check 1",CategoryData);
   let options = {
     headers: {
       Authorization: "Bearer WXZwPIXGJf-OS-BO3J5GG3jbavcv-Up9wIfv-XEPCRG-QtzSreBmoRo60C0Ar7YpnBaRpdL01ulOckDQq2uzfXx0rhVRUJJRqrh6do8RFdzBUnELHa-wIui1hHsSY3Yx", // even a small space btwn token, = and <%= will break
@@ -229,7 +223,6 @@ async function allCategories(event,argsCategoryValue=[]) {
   }
   tempCategoryData=CategoryData
   tempCategoryData=tempCategoryData.slice(0,5)
-  console.log("datavk",CategoryData)
   checkboxhtmlCategories=''
   tempCategoryData.forEach(item => {
     checkboxhtmlCategories += `<div class="form-check">
@@ -240,36 +233,28 @@ async function allCategories(event,argsCategoryValue=[]) {
   </div>`
   })
   document.getElementById('categoriesCheckbox').innerHTML = checkboxhtmlCategories
-  console.log(data);
 }
 
 function checkboxCategoriesEvent(id, display = true) {
-  console.log(">>>>>>>>>>>>> 2",id)
   categoriesparams = []
   categoriesparamsapi = []
   if (display) {
     currentStatusCategories = document.getElementById(id).checked;
-    console.log("curr", document.getElementById(id).checked);
   }
   else {
     document.getElementById(id).checked = display;
-    console.log("display", display);
   }
   CategoryData.forEach(item => {
-    console.log(">>>>>>>>>> 4",item);
     if (item.id === id) {
-      console.log("yes");
       item.checked = display ? currentStatusCategories : display;
     }
     if (item.checked) {
-      console.log("no");
       categoriesparams.push({ name: item.title, id: item.id });
       categoriesparamsapi.push(item.title);
     }
-console.log(">>>>>>>>>> 5",item)
+
   })
-  console.log(">>>>>> 3",categoriesparamsapi)
-console.log("categoriesparams",categoriesparams)
+ 
   let selectedCategories = ''
   categoriesparams.forEach(item => {
     selectedCategories += `<button type="button" class="btn btn-primary col-sm-3 col-md-2 m-1" onclick="checkboxCategoriesEvent(${item.id},false)" >${item.name}<span class="badge bg-secondary">X</span></button>`
