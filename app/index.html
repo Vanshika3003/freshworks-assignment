@@ -91,7 +91,7 @@
           <div class="border ml-3 mt-2">
             <div class="mb-3 container">
               <label for="exampleInputEmail1" class="form-label">Select category</label>
-              <input type="text" id="multiselect" class="form-control" onkeyup="searchCategory()"
+              <input type="text" id="multiselect" class="form-control" onkeyup="searchCategoryFunction()"
                 id="exampleInputEmail1">
             </div>
             <div class="container" id="categoriesCheckbox">
@@ -128,26 +128,7 @@
 <script async nomodule src="https://unpkg.com/@freshworks/crayons@3/dist/crayons/crayons.js"></script>
 
 <script>
-  const changeStepper = function (stepper, direction) {
-    if (direction == "next") {
-      for (i = 1; i <= 6; i++) {
-        if (i == stepper + 1) {
-          document.getElementById(i).style.display = "block";
-        } else {
-          document.getElementById(i).style.display = "none";
-        }
-      }
-    } else {
-      for (i = 1; i <= 6; i++) {
-        if (i == stepper - 1) {
-          document.getElementById(i).style.display = "block";
-        } else {
-          document.getElementById(i).style.display = "none";
-        }
-      }
-    }
-  };
-
+  
 </script>
 
 </html>
