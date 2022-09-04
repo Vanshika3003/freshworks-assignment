@@ -4,7 +4,7 @@ var CategoryData;
 var inputText = "";
 var businessCategories;
 var autocompleteResponse;
-var location;
+var selectedValueLocation;
 var categories;
 var apiKey =
   "WXZwPIXGJf-OS-BO3J5GG3jbavcv-Up9wIfv-XEPCRG-QtzSreBmoRo60C0Ar7YpnBaRpdL01ulOckDQq2uzfXx0rhVRUJJRqrh6do8RFdzBUnELHa-wIui1hHsSY3Yx";
@@ -127,6 +127,12 @@ async function searchCategoryApi(inputText) {
   allCategoriesForCheckbox({}, data);
 }
 
+//Getting Selected Value Of Location
+function getSelectedLocation() {
+  var select = document.getElementById("mySelect");
+  selectedValueLocation = select.options[select.selectedIndex].value;
+}
+
 //Getting All Params on submitting filters
 function submit() {
   let payload = {
@@ -134,9 +140,7 @@ function submit() {
     open_now: suggestedChecked,
     price: priceChecked,
     attributes: featureChecked,
-    // longitude: -122.407821655273,
-    //latitude: 37.7983818054199,
-    location: "New York",
+    location: selectedValueLocation,
   };
   const new_params = new URLSearchParams([
     ...Object.entries(payload),
@@ -160,13 +164,23 @@ async function filteredRestaurants(new_params) {
   const parsedResponse = JSON.parse(allRestaurants.response);
   for (let i = 0; i < parsedResponse.businesses.length; i++) {
     businessCategories = parsedResponse.businesses[i].categories;
+    businessTransactions = parsedResponse.businesses[i].transactions;
+    ratings = parsedResponse.businesses[i].rating;
+    r=Math.round(ratings);
     let categoriesUI = "";
+    let transactionUI = "";
+    let ratingUI = "";
     businessCategories.forEach((element) => {
-      categoriesUI += `<div class="text">
+      categoriesUI += `
     <span class="border p-1 text-center text-muted bg-light"><small>${element.title}</small> </span>&nbsp;
-    </div>`;
+    `;
     });
-
+    businessTransactions.forEach((element) => {
+      transactionUI += `<span class="icon">&#9989;</span><small>&nbsp;${element}</small>`;
+    });
+   for(let i=0;i<r;i++){
+    ratingUI+=  `<span class="fa fa-star checked"></span>`
+   }
     searchedRestaurant += ` <div class="border column">
    <div class=" p-3" >
      <img src="${
@@ -179,25 +193,22 @@ async function filteredRestaurants(new_params) {
     }</b>
       </div>
      <div class="text-center">
-      <span class="fa fa-star checked"></span>
-      <span class="fa fa-star checked"></span>
-     <span class="fa fa-star checked"></span>
-     <span class="fa fa-star"></span>
-     <span class="fa fa-star"></span>&nbsp;
+     ${ratingUI}
+     &nbsp;
       <span>${parsedResponse.businesses[i].review_count}</span>
    </div>
    <div class="text-center">
    <span>${Math.round(parsedResponse.businesses[i].distance)}miles away</span>
   </div>
   <div class="text-center">
-   <span>${parsedResponse.businesses[i].location.display_address}</span>
+   <div class="text"><span>${
+     parsedResponse.businesses[i].location.display_address
+   }</span></div>
   </div>
   <div class="text-center">
-  ${categoriesUI}
-  <div class="text"><span class="icon">&#9989;</span><small>&nbsp;Delivery</small>
-   <span class="icon">&#9989;</span><small>&nbsp;Delivery</small>
+  <div class="text">${categoriesUI}</div>
+  <div class="text">${transactionUI}
  </div>
-
   </div>
 </div>`;
     restaurantData.innerHTML = searchedRestaurant;
@@ -263,27 +274,12 @@ function checkboxCategoriesEvent(id, display = true) {
       categoriesparamsapi.push(item.title);
     }
   });
-
-  // let selectedCategories = ''
-  // categoriesparams.forEach(item => {
-  //   selectedCategories += `<button type="button" class="btn btn-primary col-sm-3 col-md-2 m-1" onclick="checkboxCategoriesEvent(${item.id},false)" >${item.name}<span class="badge bg-secondary">X</span></button>`
-  // })
-
-  //document.getElementById('selectedCategories').innerHTML = selectedCategories;
 }
 
 async function init() {
   client = await app.initialized();
-  $(document).ready(function () {
-    $(".dropdown-menu button").on("click", function () {
-      var txt = $(this).text();
-      location = txt;
-    });
-  });
-  //client.events.on('app.activated', renderText);
   client.events.on("app.activated", allCategoriesForCheckbox);
 }
-
 async function renderText() {
   const textElement = document.getElementById("apptext");
   const contactData = await client.data.get("contact");
@@ -292,6 +288,7 @@ async function renderText() {
   } = contactData;
 }
 
+//Stepper For The App
 const changeStepper = function (stepper, direction) {
   if (direction == "next") {
     for (i = 1; i <= 6; i++) {

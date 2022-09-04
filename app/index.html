@@ -19,20 +19,18 @@
     <div>
       <div id="1">
         <div class="container">
-          <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle mt-2" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Choose Location
-            </button>
-            <div class="dropdown-menu"  aria-labelledby="dropdownMenu2">
-              <button class="dropdown-item" type="button">San Francisco</button>
-              <button class="dropdown-item" type="button">Canada</button>
-              <button class="dropdown-item" type="button">US</button>
-              <button class="dropdown-item" type="button">Solano</button>
-              <button class="dropdown-item" type="button">New York</button>
-            </div>
+          <div class="answer1wrap">
+            <select style="width: 140px;height:30px;" id="mySelect">
+              <option value="void">Choose Location</option>
+              <option value="San Francisco">San Francisco</option>
+              <option value="Canada">Canada</option>
+              <option value="US">US</option>
+              <option value="Solano">Solano</option>
+              <option value="New York">New York</option>
+            </select>
           </div>
-          <div class="row m-2 mt-4">
-            <button class="btn btn-danger col-4 m-1" onclick="changeStepper(1,'next');">
+          <div class="row justify-content-center m-2 mt-4">
+            <button class="btn btn-danger col-4 m-1 ml-4" onclick="changeStepper(1,'next');getSelectedLocation();">
               Next
             </button>
           </div>

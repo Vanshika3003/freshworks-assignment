@@ -7,7 +7,7 @@ html {
 *::before {
   box-sizing: inherit;
 }
-.btn-group .button:first-child{
+.btn-group .button:first-child {
   border-radius: 16px 0 0 16px !important;
 }
 
@@ -25,27 +25,26 @@ html {
   content: "";
   clear: both;
   display: table;
-
 }
 
 .btn-group button:not(:last-child) {
-  border-right: 8px; 
+  border-right: 8px;
 }
 
 .btn-group button:hover {
   background-color: grey;
 }
-.text{
-  
+.text {
   overflow: hidden;
   white-space: nowrap;
   align-items: center;
 }
-.icon{
- 
-    content: "\2705";
-
+.icon {
+  content: "\2705";
 }
 .checked {
   color: orange;
+}
+.answer1wrap{
+  padding:30px;
 }
