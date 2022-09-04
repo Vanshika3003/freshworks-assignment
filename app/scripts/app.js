@@ -1,97 +1,107 @@
 var client;
-var data = []
+var data = [];
 var CategoryData;
-var inputText = ''
-var businessCategories
-var autocompleteResponse
+var inputText = "";
+var businessCategories;
+var autocompleteResponse;
 var location;
 var categories;
-var apiKey = 'WXZwPIXGJf-OS-BO3J5GG3jbavcv-Up9wIfv-XEPCRG-QtzSreBmoRo60C0Ar7YpnBaRpdL01ulOckDQq2uzfXx0rhVRUJJRqrh6do8RFdzBUnELHa-wIui1hHsSY3Yx'
+var apiKey =
+  "WXZwPIXGJf-OS-BO3J5GG3jbavcv-Up9wIfv-XEPCRG-QtzSreBmoRo60C0Ar7YpnBaRpdL01ulOckDQq2uzfXx0rhVRUJJRqrh6do8RFdzBUnELHa-wIui1hHsSY3Yx";
 
 //Price Checkbox Array
-let pricesByPersonArray = [{ id: 101, name: '$', checked: false, value: '1' }, { id: 102, name: '$$', checked: false, value: '2' },
-{ id: 103, name: '$$$', checked: false, value: '3' },]
+let pricesByPersonArray = [
+  { id: 101, name: "$", checked: false, value: "1" },
+  { id: 102, name: "$$", checked: false, value: "2" },
+  { id: 103, name: "$$$", checked: false, value: "3" },
+];
 //Additional Features Array
-let additionalFeatures = [{
-  id: 11, name: 'Hot New', checked: false, value: 'hot_and_new'
-}, { id: 12, name: 'Open to all', checked: false, value: 'open_to_all' },
-{ id: 13, name: 'Request A Note', checked: false, value: 'request_a_quote' }]
+let additionalFeatures = [
+  {
+    id: 11,
+    name: "Hot New",
+    checked: false,
+    value: "hot_and_new",
+  },
+  { id: 12, name: "Open to all", checked: false, value: "open_to_all" },
+  { id: 13, name: "Request A Note", checked: false, value: "request_a_quote" },
+];
 
 //Embedding Checkbox List of Price By Person In Html
-let checkboxhtmlPrices = ''
-pricesByPersonArray.forEach(item => {
+let checkboxhtmlPrices = "";
+pricesByPersonArray.forEach((item) => {
   checkboxhtmlPrices += `<div class="form-check">
     <input class="form-check-input" type="checkbox" value="${item.value}" id="${item.id}"onclick="checkboxPriceEvent(${item.id})">
     <label class="form-check-label" for="flexCheckDefault">
     ${item.name}
     </label>
-    </div>`
-})
-document.getElementById('selectedPriceCheckbox').innerHTML = checkboxhtmlPrices;
+    </div>`;
+});
+document.getElementById("selectedPriceCheckbox").innerHTML = checkboxhtmlPrices;
 
 //Event to check the checkbox of price is clicked or not
 function checkboxPriceEvent(id) {
-  priceParams = []
-  priceChecked = ''
+  priceParams = [];
+  priceChecked = "";
   let currentStatus = document.getElementById(id).checked;
-  pricesByPersonArray.forEach(item => {
+  pricesByPersonArray.forEach((item) => {
     if (item.id == id) {
       item.checked = currentStatus;
     }
     if (item.checked) {
-      priceParams.push(item.value)
+      priceParams.push(item.value);
     }
-  })
+  });
   priceChecked = priceParams.toString();
 }
 
 //Embedding Checkbox List of Additional Features In Html
-let checkboxhtmlFeatures = ''
-additionalFeatures.forEach(item => {
+let checkboxhtmlFeatures = "";
+additionalFeatures.forEach((item) => {
   checkboxhtmlFeatures += `<div class="form-check">
     <input class="form-check-input" type="checkbox" value="${item.value}" id="${item.id}"onclick="checkboxFeaturesEvent(${item.id})">
     <label class="form-check-label" for="flexCheckDefault">
     ${item.name}
     </label>
-    </div>`
-})
+    </div>`;
+});
 
-document.getElementById('selectedAdditionalFeatures').innerHTML = checkboxhtmlFeatures;
+document.getElementById("selectedAdditionalFeatures").innerHTML =
+  checkboxhtmlFeatures;
 
 //Event to check the checkbox of Additional features is clicked or not
 function checkboxFeaturesEvent(id) {
-  featureParams = []
-  featureChecked = ''
+  featureParams = [];
+  featureChecked = "";
   currentFeatureStatus = document.getElementById(id).checked;
-  pricesByPersonArray.forEach(item => {
+  pricesByPersonArray.forEach((item) => {
     if (item.id == id) {
       item.checked = currentFeatureStatus;
     }
     if (item.checked) {
-      featureParams.push(item.value)
+      featureParams.push(item.value);
     }
-  })
+  });
   featureChecked = featureParams.toString();
 }
 
 //SuggestedCheckbox List
-let allCheckBox = document.querySelectorAll('#flexCheckDefault')
+let allCheckBox = document.querySelectorAll("#flexCheckDefault");
 allCheckBox.forEach((checkbox) => {
-  checkbox.addEventListener('change', (event) => {
+  checkbox.addEventListener("change", (event) => {
     if (event.target.checked) {
       suggestedChecked = event.target.value;
     }
-  })
-})
+  });
+});
 
 //Search Category from Input Element
 function searchCategoryFunction() {
-  inputText = document.getElementById('multiselect').value;
+  inputText = document.getElementById("multiselect").value;
   if (inputText.length == 0) {
     allCategoriesForCheckbox({}, []);
-  }
-  else {
-    searchCategoryApi(inputText)
+  } else {
+    searchCategoryApi(inputText);
   }
 }
 //AutoComplete Api
@@ -99,13 +109,20 @@ async function searchCategoryApi(inputText) {
   let options = {
     headers: {
       Authorization: `Bearer ${apiKey}`, // even a small space btwn token, = and <%= will break
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
   };
 
-  let autocompleteResponse = await client.request.get('https://api.yelp.com/v3/autocomplete' + '?' + 'text=' + `${inputText}`, options);
+  let autocompleteResponse = await client.request.get(
+    "https://api.yelp.com/v3/autocomplete" + "?" + "text=" + `${inputText}`,
+    options
+  );
   let categoryArray = JSON.parse(autocompleteResponse.response).categories;
-  categoryArray = categoryArray.map((item, index) => ({ ...item, id: index + 100001, checked: false }));
+  categoryArray = categoryArray.map((item, index) => ({
+    ...item,
+    id: index + 100001,
+    checked: false,
+  }));
   data = categoryArray;
   allCategoriesForCheckbox({}, data);
 }
@@ -119,43 +136,47 @@ function submit() {
     attributes: featureChecked,
     // longitude: -122.407821655273,
     //latitude: 37.7983818054199,
-    location: "New York"
-
-  }
+    location: "New York",
+  };
   const new_params = new URLSearchParams([
     ...Object.entries(payload),
   ]).toString();
   filteredRestaurants(new_params);
-
 }
 //Filtering Restaurants on filters
 async function filteredRestaurants(new_params) {
-  let searchedRestaurant = ''
+  let searchedRestaurant = "";
   let options = {
     headers: {
       Authorization: `Bearer ${apiKey}`, // even a small space btwn token, = and <%= will break
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
   };
-  let allRestaurants = await client.request.get('https://api.yelp.com/v3/businesses/search' + '?' + new_params, options);
-  const restaurantData = document.getElementById('restaurantData');
+  let allRestaurants = await client.request.get(
+    "https://api.yelp.com/v3/businesses/search" + "?" + new_params,
+    options
+  );
+  const restaurantData = document.getElementById("restaurantData");
   const parsedResponse = JSON.parse(allRestaurants.response);
   for (let i = 0; i < parsedResponse.businesses.length; i++) {
-    businessCategories = (parsedResponse.businesses[i].categories)
-    let categoriesUI = ''
+    businessCategories = parsedResponse.businesses[i].categories;
+    let categoriesUI = "";
     businessCategories.forEach((element) => {
       categoriesUI += `<div class="text">
     <span class="border p-1 text-center text-muted bg-light"><small>${element.title}</small> </span>&nbsp;
-    </div>`
-    })
-
+    </div>`;
+    });
 
     searchedRestaurant += ` <div class="border column">
    <div class=" p-3" >
-     <img src="${parsedResponse.businesses[i].image_url}" style="max-width: 155px;height: 170px; "  class="rounded mx-auto d-block" alt="">
+     <img src="${
+       parsedResponse.businesses[i].image_url
+     }" style="max-width: 155px;height: 170px; "  class="rounded mx-auto d-block" alt="">
    </div>
   <div class="text-center">
-     <b>${parsedResponse.businesses[i].name} | ${parsedResponse.businesses[i].price}</b>
+     <b>${parsedResponse.businesses[i].name} | ${
+      parsedResponse.businesses[i].price
+    }</b>
       </div>
      <div class="text-center">
       <span class="fa fa-star checked"></span>
@@ -178,54 +199,62 @@ async function filteredRestaurants(new_params) {
  </div>
 
   </div>
-</div>`
+</div>`;
     restaurantData.innerHTML = searchedRestaurant;
   }
-
 }
 
 //Getting All Categories in Checkbox
 async function allCategoriesForCheckbox(event, argsCategoryValue = []) {
-  let checkboxhtmlCategories = ''
-  CategoryData = argsCategoryValue
+  let checkboxhtmlCategories = "";
+  CategoryData = argsCategoryValue;
   let options = {
     headers: {
       Authorization: `Bearer ${apiKey}`, // even a small space btwn token, = and <%= will break
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
   };
-  let allCategoriesResponse = await client.request.get('https://api.yelp.com/v3/categories', options);
-  let allRestaurantCategories = JSON.parse(allCategoriesResponse.response)
+  let allCategoriesResponse = await client.request.get(
+    "https://api.yelp.com/v3/categories",
+    options
+  );
+  let allRestaurantCategories = JSON.parse(allCategoriesResponse.response);
   if (CategoryData.length == 0) {
-    const result = allRestaurantCategories.categories.filter(item => item.parent_aliases[0] === 'restaurants');
-    CategoryData = result.map((item, index) => ({ ...item, id: index + 100001, checked: false }))
+    const result = allRestaurantCategories.categories.filter(
+      (item) => item.parent_aliases[0] === "restaurants"
+    );
+    CategoryData = result.map((item, index) => ({
+      ...item,
+      id: index + 100001,
+      checked: false,
+    }));
   }
-  tempCategoryData = CategoryData
-  tempCategoryData = tempCategoryData.slice(0, 50)
-  checkboxhtmlCategories = ''
-  tempCategoryData.forEach(item => {
+  tempCategoryData = CategoryData;
+  tempCategoryData = tempCategoryData.slice(0, 50);
+  checkboxhtmlCategories = "";
+  tempCategoryData.forEach((item) => {
     checkboxhtmlCategories += `<div class="form-check">
     <input class="form-check-input" type="checkbox" value="" id="${item.id}"onclick="checkboxCategoriesEvent(${item.id})">
     <label class="form-check-label" for="flexCheckDefault">
       ${item.title}
     </label>
-  </div>`
-  })
-  document.getElementById('categoriesCheckbox').innerHTML = checkboxhtmlCategories
+  </div>`;
+  });
+  document.getElementById("categoriesCheckbox").innerHTML =
+    checkboxhtmlCategories;
 }
 
 //Event to check the checkbox of categories is clicked or not
 function checkboxCategoriesEvent(id, display = true) {
-  categoriesparams = []
-  categoriesparamsapi = []
-  let currentStatusCategories
+  categoriesparams = [];
+  categoriesparamsapi = [];
+  let currentStatusCategories;
   if (display) {
     currentStatusCategories = document.getElementById(id).checked;
-  }
-  else {
+  } else {
     document.getElementById(id).checked = display;
   }
-  CategoryData.forEach(item => {
+  CategoryData.forEach((item) => {
     if (item.id === id) {
       item.checked = display ? currentStatusCategories : display;
     }
@@ -233,8 +262,7 @@ function checkboxCategoriesEvent(id, display = true) {
       categoriesparams.push({ name: item.title, id: item.id });
       categoriesparamsapi.push(item.title);
     }
-
-  })
+  });
 
   // let selectedCategories = ''
   // categoriesparams.forEach(item => {
@@ -244,25 +272,23 @@ function checkboxCategoriesEvent(id, display = true) {
   //document.getElementById('selectedCategories').innerHTML = selectedCategories;
 }
 
-
-
 async function init() {
   client = await app.initialized();
   $(document).ready(function () {
-    $('.dropdown-menu button').on('click', function () {
-      var txt = ($(this).text());
+    $(".dropdown-menu button").on("click", function () {
+      var txt = $(this).text();
       location = txt;
     });
   });
   //client.events.on('app.activated', renderText);
-  client.events.on('app.activated', allCategoriesForCheckbox);
+  client.events.on("app.activated", allCategoriesForCheckbox);
 }
 
 async function renderText() {
-  const textElement = document.getElementById('apptext');
-  const contactData = await client.data.get('contact');
+  const textElement = document.getElementById("apptext");
+  const contactData = await client.data.get("contact");
   const {
-    contact: { name }
+    contact: { name },
   } = contactData;
 }
 
