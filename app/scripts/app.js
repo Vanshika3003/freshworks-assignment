@@ -112,19 +112,22 @@ async function searchCategoryApi(inputText) {
       "Content-Type": "application/json",
     },
   };
-
-  let autocompleteResponse = await client.request.get(
-    "https://api.yelp.com/v3/autocomplete" + "?" + "text=" + `${inputText}`,
-    options
-  );
-  let categoryArray = JSON.parse(autocompleteResponse.response).categories;
-  categoryArray = categoryArray.map((item, index) => ({
-    ...item,
-    id: index + 100001,
-    checked: false,
-  }));
-  data = categoryArray;
-  allCategoriesForCheckbox({}, data);
+  try {
+    let autocompleteResponse = await client.request.get(
+      "https://api.yelp.com/v3/autocomplete" + "?" + "text=" + `${inputText}`,
+      options
+    );
+    let categoryArray = JSON.parse(autocompleteResponse.response).categories;
+    categoryArray = categoryArray.map((item, index) => ({
+      ...item,
+      id: index + 100001,
+      checked: false,
+    }));
+    data = categoryArray;
+    allCategoriesForCheckbox({}, data);
+  } catch (e) {
+    console.log("Unable to call Search Category Api");
+  }
 }
 
 //Getting Selected Value Of Location
@@ -156,32 +159,33 @@ async function filteredRestaurants(new_params) {
       "Content-Type": "application/json",
     },
   };
-  let allRestaurants = await client.request.get(
-    "https://api.yelp.com/v3/businesses/search" + "?" + new_params,
-    options
-  );
-  const restaurantData = document.getElementById("restaurantData");
-  const parsedResponse = JSON.parse(allRestaurants.response);
-  for (let i = 0; i < parsedResponse.businesses.length; i++) {
-    businessCategories = parsedResponse.businesses[i].categories;
-    businessTransactions = parsedResponse.businesses[i].transactions;
-    ratings = parsedResponse.businesses[i].rating;
-    r=Math.round(ratings);
-    let categoriesUI = "";
-    let transactionUI = "";
-    let ratingUI = "";
-    businessCategories.forEach((element) => {
-      categoriesUI += `
+  try {
+    let allRestaurants = await client.request.get(
+      "https://api.yelp.com/v3/businesses/search" + "?" + new_params,
+      options
+    );
+    const restaurantData = document.getElementById("restaurantData");
+    const parsedResponse = JSON.parse(allRestaurants.response);
+    for (let i = 0; i < parsedResponse.businesses.length; i++) {
+      businessCategories = parsedResponse.businesses[i].categories;
+      businessTransactions = parsedResponse.businesses[i].transactions;
+      ratings = parsedResponse.businesses[i].rating;
+      r = Math.round(ratings);
+      let categoriesUI = "";
+      let transactionUI = "";
+      let ratingUI = "";
+      businessCategories.forEach((element) => {
+        categoriesUI += `
     <span class="border p-1 text-center text-muted bg-light"><small>${element.title}</small> </span>&nbsp;
     `;
-    });
-    businessTransactions.forEach((element) => {
-      transactionUI += `<span class="icon">&#9989;</span><small>&nbsp;${element}</small>`;
-    });
-   for(let i=0;i<r;i++){
-    ratingUI+=  `<span class="fa fa-star checked"></span>`
-   }
-    searchedRestaurant += ` <div class="border column">
+      });
+      businessTransactions.forEach((element) => {
+        transactionUI += `<span class="icon">&#9989;</span><small>&nbsp;${element}</small>`;
+      });
+      for (let i = 0; i < r; i++) {
+        ratingUI += `<span class="fa fa-star checked"></span>`;
+      }
+      searchedRestaurant += ` <div class="border column">
    <div class=" p-3" >
      <img src="${
        parsedResponse.businesses[i].image_url
@@ -189,8 +193,8 @@ async function filteredRestaurants(new_params) {
    </div>
   <div class="text-center">
      <b>${parsedResponse.businesses[i].name} | ${
-      parsedResponse.businesses[i].price
-    }</b>
+        parsedResponse.businesses[i].price
+      }</b>
       </div>
      <div class="text-center">
      ${ratingUI}
@@ -211,7 +215,10 @@ async function filteredRestaurants(new_params) {
  </div>
   </div>
 </div>`;
-    restaurantData.innerHTML = searchedRestaurant;
+      restaurantData.innerHTML = searchedRestaurant;
+    }
+  } catch (e) {
+    console.log("Unable to call Filtered Restaurants Api");
   }
 }
 
@@ -277,15 +284,23 @@ function checkboxCategoriesEvent(id, display = true) {
 }
 
 async function init() {
-  client = await app.initialized();
-  client.events.on("app.activated", allCategoriesForCheckbox);
+  try {
+    client = await app.initialized();
+    client.events.on("app.activated", allCategoriesForCheckbox);
+  } catch (e) {
+    console.log(e);
+  }
 }
 async function renderText() {
-  const textElement = document.getElementById("apptext");
-  const contactData = await client.data.get("contact");
-  const {
-    contact: { name },
-  } = contactData;
+  try {
+    const textElement = document.getElementById("apptext");
+    const contactData = await client.data.get("contact");
+    const {
+      contact: { name },
+    } = contactData;
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 //Stepper For The App
